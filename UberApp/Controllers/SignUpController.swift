@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SignUpController: UIViewController {
     
@@ -31,9 +32,9 @@ class SignUpController: UIViewController {
         return view
     }()
     
-
+    
     private lazy var passwordContainerView: UIView =  {
-        let view = UIView().inputContainerView(image: #imageLiteral(resourceName: "ic_lock_outline_white_2x"), textfield: passwrodTextField)
+        let view = UIView().inputContainerView(image: #imageLiteral(resourceName: "ic_lock_outline_white_2x"), textfield: passwordTextField)
         view.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return view
     }()
@@ -43,26 +44,29 @@ class SignUpController: UIViewController {
         view.heightAnchor.constraint(equalToConstant: 80).isActive = true
         return view
     }()
-
+    
     
     private let emailTextField: UITextField = {
         return UITextField().textField(withPlaceholder: "Email")
     }()
     
     private let fullNameTextField: UITextField = {
-           return UITextField().textField(withPlaceholder: "Full Name")
-       }()
+        return UITextField().textField(withPlaceholder: "Full Name")
+    }()
+    
+    private let passwordTextField: UITextField = {
+        return UITextField().textField(withPlaceholder: "Password", isSecureTextEntry: true)
+    }()
     
     private let signUpButton: AuthButton = {
         let button = AuthButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
         return button
     }()
-
-    private let passwrodTextField: UITextField = {
-        return UITextField().textField(withPlaceholder: "Password", isSecureTextEntry: true)
-    }()
+    
+    
     
     private let accountSegmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["Rider", "Driver"])
@@ -97,6 +101,32 @@ class SignUpController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc func handleSignUp() {
+        
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let fullname = fullNameTextField.text else { return }
+        let accountTypeIndex = accountSegmentedControl.selectedSegmentIndex
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                print("Failed to register user with error \(error.localizedDescription)")
+                return
+            }
+            
+            guard let uid = result?.user.uid else { return }
+            
+            let values: [String: Any] = ["email": email,
+                          "fullname": fullname,
+                          "accountType": accountTypeIndex] as [String : Any]
+            
+            Database.database().reference().child("users").child(uid).updateChildValues(values, withCompletionBlock: { (error, ref) in
+                print("Successfully registered user and saved data")
+            })
+        }
+        
+    }
+    
     // MARK: - Helpers function
     private func configureUI() {
         view.backgroundColor = .backgroundColor
@@ -105,7 +135,9 @@ class SignUpController: UIViewController {
         titleLabel.anchor(top: view.safeAreaLayoutGuide.topAnchor)
         titleLabel.centerX(inView: view)
         
-        let stackView = UIStackView(arrangedSubviews: [emailContainerView, fullNameContainerView, passwordContainerView, accountContainerView, signUpButton])
+        let stackView = UIStackView(arrangedSubviews: [emailContainerView,
+                                                       fullNameContainerView, passwordContainerView,
+                                                       accountContainerView, signUpButton])
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.spacing = 24
