@@ -108,6 +108,7 @@ class SignUpController: UIViewController {
         guard let fullname = fullNameTextField.text else { return }
         let accountTypeIndex = accountSegmentedControl.selectedSegmentIndex
         
+        // Create a user with email and password in Firebase
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             if let error = error {
                 print("Failed to register user with error \(error.localizedDescription)")
@@ -120,6 +121,7 @@ class SignUpController: UIViewController {
                           "fullname": fullname,
                           "accountType": accountTypeIndex] as [String : Any]
             
+            // Save data to database in users >> uid >> values
             Database.database().reference().child("users").child(uid).updateChildValues(values, withCompletionBlock: { (error, ref) in
                 print("Successfully registered user and saved data")
             })

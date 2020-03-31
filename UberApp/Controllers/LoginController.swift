@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class LoginController: UIViewController {
     
@@ -45,6 +46,7 @@ class LoginController: UIViewController {
         let button = AuthButton(type: .system)
         button.setTitle("Log In", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
     
@@ -55,6 +57,7 @@ class LoginController: UIViewController {
         attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.mainBlueTint]))
         
         button.setAttributedTitle(attributedTitle, for: .normal)
+        button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
         return button
     }()
     
@@ -64,6 +67,7 @@ class LoginController: UIViewController {
         configureUI()
     }
     
+    // MARK: - Helper functions
     private func configureUI() {
         configureNavigationBar()
         view.backgroundColor = .backgroundColor
@@ -82,7 +86,6 @@ class LoginController: UIViewController {
         view.addSubview(dontHaveAccountButton)
         dontHaveAccountButton.centerX(inView: view)
         dontHaveAccountButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, height: 32)
-        dontHaveAccountButton.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
     }
     
     private func configureNavigationBar() {
@@ -94,5 +97,21 @@ class LoginController: UIViewController {
     @objc func handleSignUp() {
         let signUpController = SignUpController()
         navigationController?.pushViewController(signUpController   , animated: true)
+    }
+    
+    @objc func handleLogin() {
+        
+        guard let email = emailTextField.text else { return }
+        guard let password = passwrodTextField.text else { return }
+        
+        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                print("DEBUG: Failed to sign in \(error.localizedDescription)")
+                return
+            }
+            
+            print("DEBUG: Successfully logged the user in ...")
+        }
+        
     }
 }
