@@ -37,6 +37,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Please allow us to access your location so we can find your rides nearby</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Please allow us to access your location so we can find your rides nearby</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Please allow us to access your location so we can find your rides nearby</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

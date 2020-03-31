@@ -96,7 +96,7 @@ class LoginController: UIViewController {
     // MARK: - Selectors
     @objc func handleSignUp() {
         let signUpController = SignUpController()
-        navigationController?.pushViewController(signUpController   , animated: true)
+        navigationController?.pushViewController(signUpController ,animated: true)
     }
     
     @objc func handleLogin() {
@@ -104,13 +104,19 @@ class LoginController: UIViewController {
         guard let email = emailTextField.text else { return }
         guard let password = passwrodTextField.text else { return }
         
-        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+        Auth.auth().signIn(withEmail: email, password: password)
+        { [weak self] (result, error) in
             if let error = error {
                 print("DEBUG: Failed to sign in \(error.localizedDescription)")
                 return
             }
             
             print("DEBUG: Successfully logged the user in ...")
+            
+            guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
+            
+            controller.configureUI()
+            self?.dismiss(animated: true, completion: nil)
         }
         
     }
