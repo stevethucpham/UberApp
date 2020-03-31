@@ -41,13 +41,9 @@ class LoginController: UIViewController {
         return UITextField().textField(withPlaceholder: "Password", isSecureTextEntry: true)
     }()
     
-    private let loginButton: UIButton = {
-        let button = UIButton(type: .system)
+    private let loginButton: AuthButton = {
+        let button = AuthButton(type: .system)
         button.setTitle("Log In", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .mainBlueTint
-        button.layer.cornerRadius = 5
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         return button
     }()
@@ -97,6 +93,6 @@ class LoginController: UIViewController {
     // MARK: - Selectors
     @objc func handleSignUp() {
         let signUpController = SignUpController()
-        navigationController?.pushViewController(signUpController, animated: true)
+        navigationController?.pushViewController(signUpController   , animated: true)
     }
 }

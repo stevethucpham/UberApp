@@ -14,6 +14,7 @@
 		6A79685D2430DAC50066CE57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A79685C2430DAC50066CE57 /* Assets.xcassets */; };
 		6A7968602430DAC50066CE57 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A79685E2430DAC50066CE57 /* LaunchScreen.storyboard */; };
 		6A79686C2430DC090066CE57 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A79686B2430DC090066CE57 /* LoginController.swift */; };
+		6AED4D1A2432F60B00CDA633 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AED4D192432F60B00CDA633 /* AuthButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		6A79685F2430DAC50066CE57 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A7968612430DAC50066CE57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A79686B2430DC090066CE57 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		6AED4D192432F60B00CDA633 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		6A7968522430DAC10066CE57 /* UberApp */ = {
 			isa = PBXGroup;
 			children = (
+				6A7968682430DAD60066CE57 /* Views */,
 				6A7968672430DAD20066CE57 /* Models */,
 				6A7968692430DADC0066CE57 /* Controllers */,
 				6A7968532430DAC10066CE57 /* AppDelegate.swift */,
@@ -66,7 +69,6 @@
 				6A79685E2430DAC50066CE57 /* LaunchScreen.storyboard */,
 				6A7968592430DAC10066CE57 /* Main.storyboard */,
 				6A79686A2430DAE00066CE57 /* Utils */,
-				6A7968682430DAD60066CE57 /* Views */,
 			);
 			path = UberApp;
 			sourceTree = "<group>";
@@ -81,6 +83,7 @@
 		6A7968682430DAD60066CE57 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6AED4D192432F60B00CDA633 /* AuthButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A7968542430DAC10066CE57 /* AppDelegate.swift in Sources */,
+				6AED4D1A2432F60B00CDA633 /* AuthButton.swift in Sources */,
 				6A06F55F24317938008C40FB /* Extensions.swift in Sources */,
 				6A79686C2430DC090066CE57 /* LoginController.swift in Sources */,
 				6A06F5612431FA99008C40FB /* SignUpController.swift in Sources */,
