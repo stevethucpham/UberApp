@@ -9,8 +9,9 @@
 import UIKit
 import Firebase
 import MapKit
-import CoreLocation
 
+
+private let reuseIdentifier = "LocationCell"
 
 class HomeController: UIViewController {
     
@@ -25,16 +26,34 @@ class HomeController: UIViewController {
         return inputView
     }()
     
+    private let tableView = UITableView()
+    
+    private final let inputViewHeight: CGFloat = 200
+    
+    private var user: User? {
+        didSet {
+            locationInputView.user = user
+        }
+    }
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserIsLoggedIn()
         enableLocationServices()
+        fetchUserData()
     }
     
     // MARK: - Selectors
     
     // MARK: - Helper function
+    
+    private func fetchUserData() {
+        Service.shared.fetchUserData { [weak self] (user) in
+            self?.user = user
+        }
+    }
+    
     func checkIfUserIsLoggedIn() {
         if Auth.auth().currentUser?.uid == nil {
             print("DEBUG: User not logged in")
@@ -64,6 +83,19 @@ class HomeController: UIViewController {
     func configureUI() {
         configureMapView()
         configureActivationView()
+        configureTableView()
+    }
+    
+    private func configureTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(LocationCell.self, forCellReuseIdentifier: reuseIdentifier)
+        tableView.rowHeight = 60
+        tableView.tableFooterView = UIView()
+        
+        let height = view.frame.height - inputViewHeight
+        tableView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
+        view.addSubview(tableView)
     }
     
     private func configureMapView() {
@@ -98,7 +130,9 @@ class HomeController: UIViewController {
         locationInputView.dismissLocationHandler = {
             UIView.animate(withDuration: 0.3, animations: {
                 self.locationInputView.alpha = 0
+                self.tableView.frame.origin.y = self.view.frame.height
             }) { _ in
+                self.locationInputView.removeFromSuperview()
                 UIView.animate(withDuration: 0.3) {
                     self.inputActivationView.alpha = 1
                 }
@@ -108,6 +142,9 @@ class HomeController: UIViewController {
             self.locationInputView.alpha = 1
         }) { _ in
             print("DEBUG: Display table view")
+            UIView.animate(withDuration: 0.3) {
+                self.tableView.frame.origin.y = self.inputViewHeight
+            }
         }
     }
 }
@@ -144,6 +181,26 @@ extension HomeController: CLLocationManagerDelegate {
         if status == .authorizedWhenInUse {
             locationManager.requestAlwaysAuthorization()
         }
+    }
+    
+}
+
+// MARK: TableView Delegate & Datasource
+
+extension HomeController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return section == 0 ? 2 : 5
+        
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! LocationCell
+        return cell
     }
     
 }
