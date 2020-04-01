@@ -17,12 +17,17 @@ class HomeController: UIViewController {
     // MARK: - Properties
     private let mapView = MKMapView()
     private let locationManager = CLLocationManager()
+    private let inputActivationView = LocationInputActivationView()
+    private let locationInputView: LocationInputView = {
+        let inputView = LocationInputView()
+        inputView.backgroundColor = .white
+        inputView.alpha = 0
+        return inputView
+    }()
     
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        checkIfUserIsLoggedIn()
-//        signOut()
         checkIfUserIsLoggedIn()
         enableLocationServices()
     }
@@ -58,6 +63,7 @@ class HomeController: UIViewController {
     
     func configureUI() {
         configureMapView()
+        configureActivationView()
     }
     
     private func configureMapView() {
@@ -66,6 +72,43 @@ class HomeController: UIViewController {
         
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
+    }
+    
+    private func configureActivationView() {
+        view.addSubview(inputActivationView)
+        inputActivationView.centerX(inView: view)
+        inputActivationView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 32, width: view.frame.width - 64, height: 50)
+        inputActivationView.alpha = 0
+        
+        UIView.animate(withDuration: 2) {
+            self.inputActivationView.alpha = 1
+        }
+        inputActivationView.presentInputView = { [weak self] in
+            print("DEBUG: Handle present location input view")
+            self?.inputActivationView.alpha = 0
+            self?.configureInputView()
+        }
+    }
+    
+    private func configureInputView() {
+        view.addSubview(locationInputView)
+        locationInputView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, height: 200)
+        
+        // Dismiss input view and display activation view
+        locationInputView.dismissLocationHandler = {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.locationInputView.alpha = 0
+            }) { _ in
+                UIView.animate(withDuration: 0.3) {
+                    self.inputActivationView.alpha = 1
+                }
+            }
+        }
+        UIView.animate(withDuration: 0.5, animations: {
+            self.locationInputView.alpha = 1
+        }) { _ in
+            print("DEBUG: Display table view")
+        }
     }
 }
 
