@@ -8,10 +8,13 @@
 
 import UIKit
 import Firebase
+import GeoFire
 
 class SignUpController: UIViewController {
     
     // MARK:- Properties
+    private var location = LocationHandler.shared.locationManager.location
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "UBER"
@@ -109,7 +112,7 @@ class SignUpController: UIViewController {
         let accountTypeIndex = accountSegmentedControl.selectedSegmentIndex
         
         // Create a user with email and password in Firebase
-        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+        Auth.auth().createUser(withEmail: email, password: password) { [weak self] (result, error) in
             if let error = error {
                 print("Failed to register user with error \(error.localizedDescription)")
                 return
@@ -121,18 +124,36 @@ class SignUpController: UIViewController {
                           "fullname": fullname,
                           "accountType": accountTypeIndex] as [String : Any]
             
-            // Save data to database in users >> uid >> values
-            Database.database().reference().child("users").child(uid).updateChildValues(values, withCompletionBlock: { [weak self] (error, ref) in
-                print("Successfully registered user and saved data")
-                guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
-                controller.configureUI()
-                self?.dismiss(animated: true, completion: nil)
-            })
+            if accountTypeIndex == 1 {
+                let geoFire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
+                guard let location = self?.location else { return }
+                geoFire.setLocation(location, forKey: uid) { (error) in
+                    if let error = error {
+                        print("DEBUG: GeoFire Error: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    self?.saveUserAndShowHomeController(uid: uid,
+                                                        values: values)
+                }
+            }
+            self?.saveUserAndShowHomeController(uid: uid,
+            values: values)
         }
         
     }
     
     // MARK: - Helpers function
+    
+    private func saveUserAndShowHomeController(uid: String, values: [String: Any]) {
+        // Save data to database in users >> uid >> values
+        REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: { [weak self] (error, ref) in
+            print("Successfully registered user and saved data")
+            guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
+            controller.configureUI()
+            self?.dismiss(animated: true, completion: nil)
+        })
+    }
     private func configureUI() {
         view.backgroundColor = .backgroundColor
         

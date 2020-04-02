@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		356B9347BECAE6858E8CC651 /* Pods_UberApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4B12D7516962651B4B74C16 /* Pods_UberApp.framework */; };
+		6568136C5E7BD7C915E7CFFA /* Pods_UberApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7459274AA1303386CD0C4EE2 /* Pods_UberApp.framework */; };
 		6A06F55F24317938008C40FB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A06F55E24317938008C40FB /* Extensions.swift */; };
 		6A06F5612431FA99008C40FB /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A06F5602431FA99008C40FB /* SignUpController.swift */; };
 		6A7968542430DAC10066CE57 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A7968532430DAC10066CE57 /* AppDelegate.swift */; };
@@ -15,6 +15,8 @@
 		6A79685D2430DAC50066CE57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A79685C2430DAC50066CE57 /* Assets.xcassets */; };
 		6A7968602430DAC50066CE57 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A79685E2430DAC50066CE57 /* LaunchScreen.storyboard */; };
 		6A79686C2430DC090066CE57 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A79686B2430DC090066CE57 /* LoginController.swift */; };
+		6A815CB12435AA2D000E948B /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A815CB02435AA2D000E948B /* LocationHandler.swift */; };
+		6A815CB32435BD5F000E948B /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A815CB22435BD5F000E948B /* DriverAnnotation.swift */; };
 		6A9B3F89243403CF00F804F9 /* LocationInputActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9B3F88243403CF00F804F9 /* LocationInputActivationView.swift */; };
 		6A9B3F8B243418DB00F804F9 /* LocationInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9B3F8A243418DB00F804F9 /* LocationInputView.swift */; };
 		6A9B3F8D243445DD00F804F9 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9B3F8C243445DD00F804F9 /* LocationCell.swift */; };
@@ -35,6 +37,8 @@
 		6A79685F2430DAC50066CE57 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A7968612430DAC50066CE57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A79686B2430DC090066CE57 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		6A815CB02435AA2D000E948B /* LocationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHandler.swift; sourceTree = "<group>"; };
+		6A815CB22435BD5F000E948B /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		6A9B3F88243403CF00F804F9 /* LocationInputActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputActivationView.swift; sourceTree = "<group>"; };
 		6A9B3F8A243418DB00F804F9 /* LocationInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputView.swift; sourceTree = "<group>"; };
 		6A9B3F8C243445DD00F804F9 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
@@ -44,8 +48,8 @@
 		6AED4D1B2432FE3B00CDA633 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6AED4D1D2433291700CDA633 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		73A14ACCBB02AB4D1CD1454D /* Pods-UberApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberApp.debug.xcconfig"; path = "Target Support Files/Pods-UberApp/Pods-UberApp.debug.xcconfig"; sourceTree = "<group>"; };
+		7459274AA1303386CD0C4EE2 /* Pods_UberApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UberApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DC960F887539589AA75A105 /* Pods-UberApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberApp.release.xcconfig"; path = "Target Support Files/Pods-UberApp/Pods-UberApp.release.xcconfig"; sourceTree = "<group>"; };
-		B4B12D7516962651B4B74C16 /* Pods_UberApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UberApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				356B9347BECAE6858E8CC651 /* Pods_UberApp.framework in Frameworks */,
+				6568136C5E7BD7C915E7CFFA /* Pods_UberApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				6A9B3F91243470C400F804F9 /* User.swift */,
+				6A815CB22435BD5F000E948B /* DriverAnnotation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -138,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				6A06F55E24317938008C40FB /* Extensions.swift */,
+				6A815CB02435AA2D000E948B /* LocationHandler.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -153,7 +159,7 @@
 		879227B93B6FE6FD23163E85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B4B12D7516962651B4B74C16 /* Pods_UberApp.framework */,
+				7459274AA1303386CD0C4EE2 /* Pods_UberApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -169,7 +175,7 @@
 				6A79684C2430DAC10066CE57 /* Sources */,
 				6A79684D2430DAC10066CE57 /* Frameworks */,
 				6A79684E2430DAC10066CE57 /* Resources */,
-				37ED01678CE42762D937235F /* [CP] Embed Pods Frameworks */,
+				280B96060DB887849694D6D6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -250,7 +256,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		37ED01678CE42762D937235F /* [CP] Embed Pods Frameworks */ = {
+		280B96060DB887849694D6D6 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -277,6 +283,8 @@
 				6A7968542430DAC10066CE57 /* AppDelegate.swift in Sources */,
 				6AED4D1A2432F60B00CDA633 /* AuthButton.swift in Sources */,
 				6AED4D1E2433291700CDA633 /* HomeController.swift in Sources */,
+				6A815CB12435AA2D000E948B /* LocationHandler.swift in Sources */,
+				6A815CB32435BD5F000E948B /* DriverAnnotation.swift in Sources */,
 				6A06F55F24317938008C40FB /* Extensions.swift in Sources */,
 				6A79686C2430DC090066CE57 /* LoginController.swift in Sources */,
 				6A9B3F89243403CF00F804F9 /* LocationInputActivationView.swift in Sources */,
@@ -431,14 +439,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UVBYV5QPRW;
+				DEVELOPMENT_TEAM = 824CL29JFT;
 				INFOPLIST_FILE = UberApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.demo.UberApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.demo.UberApp.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -453,14 +461,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = UVBYV5QPRW;
+				DEVELOPMENT_TEAM = 824CL29JFT;
 				INFOPLIST_FILE = UberApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.demo.UberApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.demo.UberApp.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

@@ -1,7 +1,8 @@
  platform :ios, '11.0'
 
 target 'UberApp' do
-  use_frameworks!
+ use_frameworks!
+#use_modular_headers!
 
   # Pods for UberApp
 	pod 'Firebase/Core'
