@@ -71,6 +71,7 @@ class HomeController: UIViewController {
                 self.inputActivationView.alpha = 1
                 self.configureAction(config: .showMenu)
             }
+            mapView.showAnnotations(mapView.annotations, animated: true)
         case .showMenu:
             print("Show home menu")
         }
@@ -261,7 +262,7 @@ private extension HomeController {
         let directionRequest = MKDirections(request: request)
         directionRequest.calculate { [weak self] (response, error) in
             guard let response = response else { return }
-            // We only use the first route in this case 
+            // We only use the first route in this case
             self?.route = response.routes[0]
             guard let polyline = self?.route?.polyline else { return }
             self?.mapView.addOverlay(polyline)
@@ -390,6 +391,11 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
             annotation.coordinate = selectedPlacemark.coordinate
             self?.mapView.addAnnotation(annotation)
             self?.mapView.selectAnnotation(annotation, animated: true)
+            
+            if let route = self?.route {
+                self?.mapView.zoomToFit(polyline: route.polyline)
+            }
+
         }
     }
 }
