@@ -28,22 +28,19 @@ class HomeController: UIViewController {
     }()
     
     private let tableView = UITableView()
-    
     private final let inputViewHeight: CGFloat = 200
-    
     private var user: User? {
         didSet {
             locationInputView.user = user
         }
     }
+    private var searchResults = [MKPlacemark]()
     
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserIsLoggedIn()
         enableLocationServices()
-        fetchUserData()
-        fetchDrivers()
 //        signOut()
     }
     
@@ -91,7 +88,7 @@ class HomeController: UIViewController {
                 self.navigateToLogin()
             }
         } else {
-            configureUI()
+            configure()
         }
     }
     
@@ -110,6 +107,12 @@ class HomeController: UIViewController {
         let navigationController = UINavigationController(rootViewController: LoginController())
         navigationController.modalPresentationStyle = .fullScreen
         present(navigationController, animated: true, completion: nil)
+    }
+    
+    func configure() {
+        configureUI()
+        fetchUserData()
+        fetchDrivers()
     }
     
     func configureUI() {
@@ -160,17 +163,8 @@ class HomeController: UIViewController {
         locationInputView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, height: 200)
         
         // Dismiss input view and display activation view
-        locationInputView.dismissLocationHandler = {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.locationInputView.alpha = 0
-                self.tableView.frame.origin.y = self.view.frame.height
-            }) { _ in
-                self.locationInputView.removeFromSuperview()
-                UIView.animate(withDuration: 0.3) {
-                    self.inputActivationView.alpha = 1
-                }
-            }
-        }
+        locationInputView.delegate = self
+        
         UIView.animate(withDuration: 0.5, animations: {
             self.locationInputView.alpha = 1
         }) { _ in
@@ -178,6 +172,28 @@ class HomeController: UIViewController {
             UIView.animate(withDuration: 0.3) {
                 self.tableView.frame.origin.y = self.inputViewHeight
             }
+        }
+    }
+}
+
+// MARK: - Map Helper functions
+private extension HomeController {
+    func searchBy(naturalLanguageQuery: String, completion: @escaping([MKPlacemark]) -> Void) {
+        
+        var results = [MKPlacemark]()
+        
+        let request = MKLocalSearch.Request()
+        request.region = mapView.region
+        request.naturalLanguageQuery = naturalLanguageQuery
+        
+        let search = MKLocalSearch(request: request)
+        search.start { (response, error) in
+            guard let response = response else { return }
+            
+            response.mapItems.forEach { (item) in
+                results.append(item.placemark)
+            }
+            completion(results)
         }
     }
 }
@@ -223,6 +239,30 @@ extension HomeController {
     
 }
 
+// MARK: - LocationInputView Delegate
+extension HomeController: LocationInputDelegate {
+    
+    func dismissLocationView() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.locationInputView.alpha = 0
+            self.tableView.frame.origin.y = self.view.frame.height
+        }) { _ in
+            self.locationInputView.removeFromSuperview()
+            UIView.animate(withDuration: 0.3) {
+                self.inputActivationView.alpha = 1
+            }
+        }
+    }
+    
+    func executeSearch(query: String) {
+        print("DEBUG: query \(query)")
+        searchBy(naturalLanguageQuery: query) { [weak self] (placemarks) in
+            self?.searchResults = placemarks
+            self?.tableView.reloadData()
+        }
+    }
+}
+
 // MARK: TableView Delegate & Datasource
 
 extension HomeController: UITableViewDelegate, UITableViewDataSource {
@@ -232,12 +272,16 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : 5
+        return section == 0 ? 2 : searchResults.count
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! LocationCell
+        if indexPath.section == 1 {
+            cell.placemark = searchResults[indexPath.row]
+        }
+        
         return cell
     }
     

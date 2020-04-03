@@ -8,9 +8,16 @@
 
 import UIKit
 
+protocol LocationInputDelegate: class {
+    func dismissLocationView()
+    func executeSearch(query: String)
+}
+
 class LocationInputView: UIView {
     
     // MARK: - Properties
+    
+    weak var delegate: LocationInputDelegate?
     
     var user: User? {
         didSet {
@@ -73,6 +80,7 @@ class LocationInputView: UIView {
         textField.backgroundColor = .lightGray
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.returnKeyType = .search
+        textField.delegate = self
         
         let paddingView = UIView()
         paddingView.setDimension(height: 30, width: 8)
@@ -82,8 +90,6 @@ class LocationInputView: UIView {
         return textField
     }()
     
-    
-    var dismissLocationHandler: (()->())?
     
     // MARK: - Life cycle
     override init(frame: CGRect) {
@@ -140,8 +146,17 @@ class LocationInputView: UIView {
     
     // MARK: - Selectors
     @objc private func dismissLocationView() {
-        guard let dismissHandler = dismissLocationHandler else {  return }
-        dismissHandler()
+        guard let delegate = self.delegate else {  return }
+        delegate.dismissLocationView()
     }
     
+}
+
+// MARK: - UITextfield delegate
+extension LocationInputView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let text = textField.text else { return false }
+        delegate?.executeSearch(query: text)
+        return true
+    }
 }

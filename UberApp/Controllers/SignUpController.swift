@@ -150,7 +150,7 @@ class SignUpController: UIViewController {
         REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: { [weak self] (error, ref) in
             print("Successfully registered user and saved data")
             guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
-            controller.configureUI()
+            controller.configure()
             self?.dismiss(animated: true, completion: nil)
         })
     }
