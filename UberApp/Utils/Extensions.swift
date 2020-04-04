@@ -169,7 +169,7 @@ extension MKMapView {
     }
     
     func zoomToFit(polyline: MKPolyline) {
-        let insets = UIEdgeInsets(top: 10, left: 10, bottom: 20, right: 10)
+        let insets = UIEdgeInsets(top: 10, left: 10, bottom: 100, right: 10)
         setVisibleMapRect(polyline.boundingMapRect, edgePadding: insets, animated: true)
     }
 }

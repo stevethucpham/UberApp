@@ -27,6 +27,7 @@ class HomeController: UIViewController {
     
     // MARK: - Properties
     private final let inputViewHeight: CGFloat = 200
+    private final let rideActionViewHeight: CGFloat = 300
     private let mapView = MKMapView()
     private let locationManager = LocationHandler.shared.locationManager
     private let inputActivationView = LocationInputActivationView()
@@ -36,6 +37,8 @@ class HomeController: UIViewController {
         inputView.alpha = 0
         return inputView
     }()
+    
+    private let rideActionView = RideActionView()
     
     private let actionButton: UIButton = {
         let button = UIButton(type: .system)
@@ -67,11 +70,14 @@ class HomeController: UIViewController {
         switch actionButtonConfigure {
         case .dismissActionView:
             removeAnnotationsAndPolylines()
+            mapView.showAnnotations(mapView.annotations, animated: true)
+            
             UIView.animate(withDuration: 0.3) {
                 self.inputActivationView.alpha = 1
                 self.configureAction(config: .showMenu)
+                self.animateRideActionView(shouldShow: false)
             }
-            mapView.showAnnotations(mapView.annotations, animated: true)
+            
         case .showMenu:
             print("Show home menu")
         }
@@ -152,6 +158,24 @@ class HomeController: UIViewController {
         configureTableView()
     }
     
+    private func configureRideActionView(destination: MKPlacemark) {
+        rideActionView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: rideActionViewHeight)
+        rideActionView.destination = destination
+        self.view.addSubview(rideActionView)
+        animateRideActionView(shouldShow: true)
+    }
+    
+    private func animateRideActionView(shouldShow: Bool) {
+        let yOrigin = shouldShow ? view.frame.height - rideActionViewHeight : view.frame.height
+        UIView.animate(withDuration: 0.3, animations: {
+            self.rideActionView.frame.origin.y = yOrigin
+        }) { _ in
+            if !shouldShow {
+                self.rideActionView.removeFromSuperview()
+            }
+        }
+    }
+    
     func configureAction(config: ActionButtonConfiguration) {
         switch config {
         case .dismissActionView:
@@ -227,6 +251,7 @@ class HomeController: UIViewController {
         UIView.animate(withDuration: 0.3, animations: {
             self.locationInputView.alpha = 0
             self.tableView.frame.origin.y = self.view.frame.height
+            
             self.locationInputView.removeFromSuperview()
         }, completion: completion)
     }
@@ -395,6 +420,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
             if let route = self?.route {
                 self?.mapView.zoomToFit(polyline: route.polyline)
             }
+            self?.configureRideActionView(destination: selectedPlacemark)
 
         }
     }
