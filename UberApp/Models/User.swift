@@ -11,13 +11,21 @@ struct User {
     let uid: String
     let email: String
     let fullname: String
-    let accountType: Int
+    var accountType: AccountType!
     var location: CLLocation?
     
     init(uid: String, dictionary: [String: Any]) {
         self.uid = uid
         self.fullname = dictionary["fullname"] as? String ?? ""
         self.email = dictionary["email"] as? String ?? ""
-        self.accountType = dictionary["accountType"] as? Int ?? 0
+        if let index = dictionary["accountType"] as? Int {
+            self.accountType = AccountType(rawValue: index)
+        }
     }
+}
+
+
+enum AccountType: Int {
+    case passenger
+    case driver
 }

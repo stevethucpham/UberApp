@@ -62,7 +62,7 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         checkIfUserIsLoggedIn()
         enableLocationServices()
-//        signOut()
+        signOut()
     }
     
     // MARK: - Selectors
@@ -88,6 +88,10 @@ class HomeController: UIViewController {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
         Service.shared.fetchUserData(uid: currentUid) { [weak self] (user) in
             self?.user = user
+            if user.accountType == AccountType.passenger {
+                self?.fetchDrivers()
+                self?.configureActivationView()
+            }
         }
     }
     
@@ -149,18 +153,25 @@ class HomeController: UIViewController {
     func configure() {
         configureUI()
         fetchUserData()
-        fetchDrivers()
     }
     
     func configureUI() {
         configureMapView()
-        configureActivationView()
         configureTableView()
+        
+        view.addSubview(actionButton)
+        actionButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                            left: view.leftAnchor,
+                            paddingTop: 16,
+                            paddingLeft: 20,
+                            width: 30,
+                            height: 30)
     }
     
     private func configureRideActionView(destination: MKPlacemark) {
         rideActionView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: rideActionViewHeight)
         rideActionView.destination = destination
+        rideActionView.delegate = self
         self.view.addSubview(rideActionView)
         animateRideActionView(shouldShow: true)
     }
@@ -209,22 +220,15 @@ class HomeController: UIViewController {
     }
     
     private func configureActivationView() {
-        view.addSubview(actionButton)
-        actionButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                            left: view.leftAnchor,
-                            paddingTop: 16,
-                            paddingLeft: 20,
-                            width: 30,
-                            height: 30)
-        
         view.addSubview(inputActivationView)
         inputActivationView.centerX(inView: view)
         inputActivationView.anchor(top: actionButton.bottomAnchor, paddingTop: 32, width: view.frame.width - 64, height: 50)
         inputActivationView.alpha = 0
         
-        UIView.animate(withDuration: 2) {
+        UIView.animate(withDuration: 0.5) {
             self.inputActivationView.alpha = 1
         }
+        
         inputActivationView.presentInputView = { [weak self] in
             self?.inputActivationView.alpha = 0
             self?.configureInputView()
@@ -422,6 +426,19 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
             }
             self?.configureRideActionView(destination: selectedPlacemark)
 
+        }
+    }
+}
+
+extension HomeController: RideActionViewDelegate {
+    func uploadTrip(destination: MKPlacemark) {
+        guard let userLocation = locationManager?.location else { return }
+        guard let destinationLocation = destination.location else { return }
+        Service.shared.uploadTrip(userLocation.coordinate, destinationLocation.coordinate) { (error, ref) in
+            if let error = error {
+                print("DEBUG: Error while adding new trip \(error.localizedDescription)")
+            }
+            print ("DEBUG: Upload trip successfully")
         }
     }
 }

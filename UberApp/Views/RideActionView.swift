@@ -9,6 +9,10 @@
 import UIKit
 import MapKit
 
+protocol RideActionViewDelegate: class {
+    func uploadTrip(destination: MKPlacemark)
+}
+
 class RideActionView: UIView {
     
     // MARK: - Properties
@@ -19,6 +23,8 @@ class RideActionView: UIView {
             addressLabel.text = destination?.address
         }
     }
+    
+    weak var delegate: RideActionViewDelegate?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -78,6 +84,7 @@ class RideActionView: UIView {
         button.setTitle("CONFIRM UBERX", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(confirmButtonAction), for: .touchUpInside)
         return button
     }()
     
@@ -124,6 +131,13 @@ class RideActionView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Selectors
+    @objc private func confirmButtonAction() {
+        guard let delegate = delegate else { return }
+        guard let destination = self.destination else { return }
+        delegate.uploadTrip(destination: destination)
     }
 
     
