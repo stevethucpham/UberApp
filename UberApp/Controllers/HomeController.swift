@@ -53,6 +53,12 @@ class HomeController: UIViewController {
             locationInputView.user = user
         }
     }
+    
+    private var trip: Trip? {
+        didSet {
+            print("DEBUG: Show pickup view controller")
+        }
+    }
     private var searchResults = [MKPlacemark]()
     private var actionButtonConfigure = ActionButtonConfiguration()
     private var route: MKRoute?
@@ -91,6 +97,8 @@ class HomeController: UIViewController {
             if user.accountType == AccountType.passenger {
                 self?.fetchDrivers()
                 self?.configureActivationView()
+            } else {
+                self?.observerTrips()
             }
         }
     }
@@ -116,7 +124,12 @@ class HomeController: UIViewController {
             if !driverIsVisible {
                 self.mapView.addAnnotation(annotation)
             }
-            
+        }
+    }
+    
+    private func observerTrips() {
+        Service.shared.observerTrip { [weak self] trip in
+            self?.trip = trip
         }
     }
     
